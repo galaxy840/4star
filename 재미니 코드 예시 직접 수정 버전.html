@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8"> <!--페이지의 문자 인코딩 방식-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나의 포트폴리오 - 새로운 시작</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 기본 설정 */
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            margin: 0;
+            background-color: #000; /* 어두운 배경 */
+            color: #f5f5f7; /* 밝은 텍스트 */
+            line-height: 1.6;
+            scroll-behavior: smooth; /* 부드러운 스크롤 */
+            overflow-x: hidden; /* 가로 스크롤 방지 */
+        }
+
+        h1, h2, h3 {
+            font-weight: 700;
+            letter-spacing: -0.02em; /* 애플 폰트 느낌 */
+        }
+
+        p {
+            font-weight: 300;
+        }
+
+        a {
+            color: #2997ff; /* 애플 링크 색상 */
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* 내비게이션 바 (상단 고정) */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8); /* 투명도 있는 검은색 */
+            backdrop-filter: blur(10px); /* 배경 블러 효과 */
+            padding: 15px 0;
+            z-index: 1000; /* 다른 요소 위에 오도록 */
+            display: flex;
+            justify-content: center; /* 가운데 정렬 */
+            align-items: center;
+        }
+
+        .navbar-logo {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #fff;
+            margin-right: 40px;
+        }
+
+        .navbar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex; /* 가로 정렬 */
+        }
+
+        .navbar ul li {
+            margin: 0 20px;
+        }
+
+        .navbar ul li a {
+            color: #f5f5f7;
+            font-weight: 400;
+            font-size: 1.1em;
+            transition: color 0.3s ease; /* 부드러운 전환 */
+        }
+
+        .navbar ul li a:hover {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        /* 섹션 공통 스타일 */
+        section {
+            min-height: 100vh; /* 최소 화면 높이 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 80px 0; /* 상단 고정 내비게이션 고려 */
+            text-align: center;
+            position: relative; /* 자식 요소의 absolute 위치를 위해 */
+            overflow: hidden; /* 이미지 오버플로우 방지 */
+        }
+
+        section h2 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            opacity: 0; /* 초기 숨김 */
+            transform: translateY(20px); /* 초기 위치 */
+            transition: opacity 1s ease, transform 1s ease; /* 애니메이션 */
+        }
+
+        section p {
+            font-size: 1.3em;
+            max-width: 800px;
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease 0.2s, transform 1s ease 0.2s; /* 딜레이 */
+        }
+
+        section.active h2,
+        section.active p {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 홈 섹션 */
+        #home {
+            background: url('hero_image.jpg') no-repeat center center/cover; /* 배경 이미지 */
+            color: #fff;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.5); /* 텍스트 그림자 */
+            min-height: 100vh;
+            padding-top: 0; /* 이미지에 맞추기 */
+        }
+
+        #home .content {
+            padding-top: 100px; /* 내비게이션바 아래로 */
+        }
+
+        #home h2 {
+            font-size: 4.5em;
+            margin-bottom: 10px;
+        }
+
+        #home p {
+            font-size: 1.8em;
+            font-weight: 400;
+            margin-bottom: 50px;
+        }
+
+        .button {
+            background-color: #007aff;
+            color: #fff;
+            padding: 15px 30px;
+            border-radius: 999px; /* 둥근 버튼 */
+            font-size: 1.2em;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #006ee6;
+        }
+
+        /* 이력 소개 섹션 */
+        #about {
+            background-color: #1a1a1a;
+            color: #f5f5f7;
+        }
+
+        .profile-pic {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%; /* 원형 이미지 */
+            object-fit: cover;
+            margin-bottom: 30px;
+            border: 5px solid #2997ff; /* 테두리 */
+        }
+
+        /* 포트폴리오 섹션 */
+        #portfolio {
+            background-color: #000;
+            color: #fff;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 반응형 그리드 */
+            gap: 40px;
+            max-width: 1200px;
+            margin-top: 50px;
+            padding: 0 20px;
+        }
+
+        .project-card {
+            background-color: #1c1c1e; /* 카드 배경 */
+            border-radius: 15px;
+            padding: 30px;
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+        }
+
+        .project-card h3 {
+            font-size: 1.8em;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .project-card p {
+            font-size: 1em;
+            margin-bottom: 20px;
+            color: #ccc;
+            opacity: 1; /* 섹션 공통 스타일 override */
+            transform: none; /* 섹션 공통 스타일 override */
+            transition: none;
+        }
+
+        .project-card img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .project-card .view-more {
+            font-weight: 500;
+        }
+
+        /* 연락처 섹션 */
+        #contact {
+            background-color: #1a1a1a;
+            color: #f5f5f7;
+        }
+
+        .contact-info {
+            margin-top: 40px;
+            font-size: 1.2em;
+        }
+
+        .contact-info p {
+            margin: 15px 0;
+        }
+
+        /* 하단 */
+        footer {
+            background-color: #111;
+            color: #777;
+            text-align: center;
+            padding: 30px 0;
+            font-size: 0.9em;
+        }
+
+        /* 스크롤 애니메이션을 위한 JavaScript (HTML 파일 내에 포함) */
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-logo">나의 홈페이지</div>
+        <ul>
+            <li><a href="#home">홈</a></li>
+            <li><a href="#about">나를 소개</a></li>
+            <li><a href="#portfolio">나의 작품</a></li>
+            <li><a href="#contact">문의하기</a></li>
+        </ul>
+    </nav>
+
+    <section id="home">
+        <div class="content">
+            <h2>사용자 친화적 개발자<br>사용자를 위하여</h2>
+            <p>창의적인 아이디어로 가치를 만드는 개발자이자 디자이너입니다.</p>
+            <a href="#portfolio" class="button">내 작품 보기</a>
+        </div>
+    </section>
+
+    <section id="about">
+        <img src="my_profile.jpg" alt="내 프로필 사진" class="profile-pic"> <h2>이력 소개</h2><br>
+        <h3>학력</h3>
+        <h3>두원공과대 2025 입학</h3>
+        <p>안녕하세요 저는 백엔드와 프론트엔드를 넘나들벼 다재다능한 개발자를 꿈꾸는 <strong>이건희</strong>입니다.<br>
+            사용자 경험을 최우선으로 생각하며, 깔끔하고 효율적인 코드와 디자인을 추구합니다.<br>
+            새로운 기술에 흥미와 관심을 기울이며 나를 발전시키기 위해 노력합니다. </p>
+        <p><strong>주요 스킬:</strong> C#  JavaScript  python  Unreal Engine</p>
+        <a href="my_resume.pdf" class="button"> 이력서이력서이력서</a> </section>
+        <!--이력서 다운로드 하이퍼 링크 이곳에 해라.-->
+
+    <section id="portfolio">
+        <h2>개인 프로젝트</h2>
+        <p>직접 기획하고 개발한 프로젝트들을 소개합니다.<br>
+            각 프로젝트는 저의 분야별 능력을 보여주는 프로젝트 결과물입니다.</p>
+        <div class="project-grid">
+            <div class="project-card">
+                <img src="project_poster_design.jpg" alt="포스터 디자인 프로젝트">
+                <h3>HTML/CSS 포스터 디자인</h3>
+                <p>HTML과 CSS등 여러 프로그래밍 언어와 도구를 활용하여 웹 홈페이지를 디자인했습니다. 반응형 디자인을 적용하여 다양한 기기에서 최적의 시각 경험을 제공합니다.</p>
+                <a href="#" class="view-more">자세히 보기 &gt;</a>
+            </div>
+            <div class="project-card">
+                <img src="IMG_4365.png" alt="재활용 액자 프로젝트">
+                <h3>스마트폰 재활용 액자</h3>
+                <p>버려진 스마트폰 부품을 재활용하여 디지털과 예술을 접합시킨 작품 액자를 제작한 프로젝트입니다. 하드웨어와 소프트웨어의 융합을 통한 창의적인 디자인을 보여줍니다.</p>
+                <a href="#" class="view-more">자세히 보기 &gt;</a>
+            </div>
+            <div class="project-card">
+                <img src="project_web_app.jpg" alt="웹 애플리케이션 프로젝트">
+                <h3>다른 프로젝트다른 프로젝트다른 프로젝트</h3>
+                <p>프로젝트 내용 프로젝트 내용 프로젝트 내용 프로젝트 내용 프로젝트 내용 프로젝트 내용 프로젝트 내용 프로젝트 내용 프로젝트 내용 </p>
+                <a href="#" class="view-more">자세히 보기 &gt;</a>
+            </div>
+            </div>
+    </section>
+
+    <section id="contact">
+        <h2>연락처</h2>
+        <p>저의 작업에 관심이 있으시거나 함께 협업하고 싶으시다면 언제든지 연락 주세요.열심히 하겠습니다.</p>
+        
+        <div class="contact-info">
+            <p><strong>이메일:</strong> tkatjdrjsgml@gmail.com</p>
+            <p><strong>GitHub:</strong> <a href="https://github.com/your-github" target="_blank"> 공백 </a></p>
+
+        </div>
+        <a href="mailto:your.email@example.com" class="button">이메일 보내는 버튼</a>
+        <!-- 이메일 보내는 버튼-->
+    </section>
+
+    <footer>
+        <p>&copy; 2025 이건희의 홈페이지.</p>
+    </footer>
+
+    <script>
+        // 스크롤 시 섹션 애니메이션 활성화 (JavaScript)
+        // 스크롤 애니메이션 코드부분 부터는 배운적 없는 배워야할 부분이다.
+        const sections = document.querySelectorAll('section');
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.3 /* 섹션의 30%가 보일 때 활성화 */
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    // 한 번 활성화되면 더 이상 관찰하지 않도록
+                    // observer.unobserve(entry.target);
+                } else {
+                    // 스크롤 업 시 다시 비활성화 (선택 사항)
+                    entry.target.classList.remove('active');
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // 내비게이션 바 스크롤 시 배경색 변경 (선택 사항)
+        // const navbar = document.querySelector('.navbar');
+        // window.addEventListener('scroll', () => {
+        //     if (window.scrollY > 50) {
+        //         navbar.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+        //     } else {
+        //         navbar.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+        //     }
+        // });
+    </script>
+</body>
+</html>
